@@ -2,29 +2,449 @@ version: "3.1"
 
 stories:
 
-- story: happy path
+# ===== HAPPY PATH STORIES =====
+- story: greeting and product inquiry
   steps:
   - intent: greet
   - action: utter_greet
-  - intent: mood_great
+  - intent: ask_product_info
+  - action: utter_product_info
+  - intent: affirm
+  - action: utter_happy
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: casual conversation flow
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: chitchat_casual
+  - action: utter_chitchat
+  - intent: ask_product_info
+  - action: utter_product_info
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: quick product inquiry
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: ask_product_info
+  - action: utter_product_info
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: product inquiry with affirmation
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: ask_product_info
+  - action: utter_product_info
+  - intent: affirm
   - action: utter_happy
 
-- story: sad path 1
+- story: simple affirmation
+  steps:
+  - intent: affirm
+  - action: utter_happy
+
+- story: simple denial
+  steps:
+  - intent: deny
+  - action: utter_cheer_up
+
+- story: product inquiry user satisfied
   steps:
   - intent: greet
   - action: utter_greet
-  - intent: mood_unhappy
-  - action: utter_cheer_up
+  - intent: ask_product_info
+  - action: utter_product_info
+  - intent: affirm
+  - action: utter_happy
   - action: utter_did_that_help
   - intent: affirm
   - action: utter_happy
 
-- story: sad path 2
+- story: product inquiry user not satisfied
   steps:
   - intent: greet
   - action: utter_greet
-  - intent: mood_unhappy
-  - action: utter_cheer_up
-  - action: utter_did_that_help
+  - intent: ask_product_info
+  - action: utter_product_info
   - intent: deny
+  - action: utter_cheer_up
+
+- story: chitchat with affirmation
+  steps:
+  - intent: chitchat_casual
+  - action: utter_chitchat
+  - intent: affirm
+  - action: utter_happy
+
+# ===== GUARDRAIL STORIES - OFFENSIVE LANGUAGE =====
+- story: offensive language first time
+  steps:
+  - intent: offensive_language
+  - action: utter_reject_offensive
+  - action: action_log_violation
+  - action: action_handle_violation
+
+- story: offensive language with context
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: offensive_language
+  - action: utter_reject_offensive
+  - action: action_log_violation
+  - action: action_handle_violation
+
+- story: offensive language then recovery
+  steps:
+  - intent: offensive_language
+  - action: utter_reject_offensive
+  - action: action_log_violation
+  - action: action_handle_violation
+  - intent: greet
+  - action: utter_greet
+  - intent: ask_product_info
+  - action: utter_product_info
+
+# ===== GUARDRAIL STORIES - HARASSMENT =====
+- story: harassment first time
+  steps:
+  - intent: harassment
+  - action: utter_reject_harassment
+  - action: action_log_violation
+  - action: action_handle_violation
+
+- story: harassment with context
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: harassment
+  - action: utter_reject_harassment
+  - action: action_log_violation
+  - action: action_handle_violation
+
+- story: harassment then recovery
+  steps:
+  - intent: harassment
+  - action: utter_reject_harassment
+  - action: action_log_violation
+  - action: action_handle_violation
+  - intent: ask_product_info
+  - action: utter_product_info
+
+# ===== GUARDRAIL STORIES - COMPETITOR =====
+- story: competitor mention simple
+  steps:
+  - intent: competitor_mention
+  - action: utter_reject_competitor
+  - action: action_log_violation
+
+- story: competitor mention with context
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: competitor_mention
+  - action: utter_reject_competitor
+  - action: action_log_violation
+
+- story: competitor mention then redirect
+  steps:
+  - intent: competitor_mention
+  - action: utter_reject_competitor
+  - action: action_log_violation
+  - intent: ask_product_info
+  - action: utter_product_info
+
+# ===== GUARDRAIL STORIES - SENSITIVE DATA =====
+- story: request sensitive data
+  steps:
+  - intent: request_sensitive_data
+  - action: utter_reject_sensitive_request
+  - action: action_log_violation
+
+- story: request sensitive data with context
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: request_sensitive_data
+  - action: utter_reject_sensitive_request
+  - action: action_log_violation
+
+- story: share sensitive data warning first
+  steps:
+  - intent: share_sensitive_data
+  - action: utter_warn_sensitive_sharing
+  - action: action_log_violation
+  - action: action_handle_violation
+
+- story: share sensitive data warning simple
+  steps:
+  - intent: share_sensitive_data
+  - action: utter_warn_sensitive_sharing
+
+- story: share sensitive data with context
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: share_sensitive_data
+  - action: utter_warn_sensitive_sharing
+  - action: action_log_violation
+  - action: action_handle_violation
+
+- story: share sensitive data then affirm
+  steps:
+  - intent: share_sensitive_data
+  - action: utter_warn_sensitive_sharing
+  - action: action_log_violation
+  - action: action_handle_violation
+  - intent: affirm
+  - action: utter_happy
+
+# ===== GUARDRAIL STORIES - POLITICAL & SARA =====
+- story: political topic
+  steps:
+  - intent: political_topic
+  - action: utter_reject_political
+  - action: action_log_violation
+
+- story: political topic with context
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: political_topic
+  - action: utter_reject_political
+  - action: action_log_violation
+
+- story: sara topic
+  steps:
+  - intent: sara_topic
+  - action: utter_reject_sara
+  - action: action_log_violation
+  - action: action_handle_violation
+
+- story: sara topic with context
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: sara_topic
+  - action: utter_reject_sara
+  - action: action_log_violation
+  - action: action_handle_violation
+
+# ===== GUARDRAIL STORIES - SPAM & FINANCIAL =====
+- story: spam pattern
+  steps:
+  - intent: spam_pattern
+  - action: utter_reject_spam
+  - action: action_log_violation
+
+- story: misleading financial claim
+  steps:
+  - intent: misleading_financial_claim
+  - action: utter_correct_financial_claim
+  - action: action_log_violation
+
+- story: misleading financial after product info
+  steps:
+  - intent: ask_product_info
+  - action: utter_product_info
+  - intent: misleading_financial_claim
+  - action: utter_correct_financial_claim
+  - action: action_log_violation
+
+# ===== GUARDRAIL STORIES - SEVERE VIOLATIONS =====
+- story: prompt injection
+  steps:
+  - intent: prompt_injection
+  - action: utter_reject_injection
+  - action: action_log_violation
+  - action: action_escalate_violation
+
+- story: prompt injection with context
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: prompt_injection
+  - action: utter_reject_injection
+  - action: action_log_violation
+  - action: action_escalate_violation
+
+- story: technical threat
+  steps:
+  - intent: out_of_scope_technical
+  - action: utter_reject_technical_threat
+  - action: action_log_violation
+  - action: action_escalate_violation
+
+- story: technical threat with context
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: out_of_scope_technical
+  - action: utter_reject_technical_threat
+  - action: action_log_violation
+  - action: action_escalate_violation
+
+# ===== GUARDRAIL STORIES - OUT OF SCOPE =====
+- story: out of scope general
+  steps:
+  - intent: out_of_scope_general
+  - action: utter_redirect_scope
+
+- story: out of scope general with context
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: out_of_scope_general
+  - action: utter_redirect_scope
+
+- story: out of scope then redirect
+  steps:
+  - intent: out_of_scope_general
+  - action: utter_redirect_scope
+  - intent: ask_product_info
+  - action: utter_product_info
+
+# ===== GUARDRAIL STORIES - REPETITIVE & GIBBERISH =====
+- story: repetitive message
+  steps:
+  - intent: repetitive_message
+  - action: utter_reject_repetitive
+  - action: action_log_violation
+
+- story: gibberish message
+  steps:
+  - intent: gibberish
+  - action: utter_reject_gibberish
+
+- story: gibberish then valid
+  steps:
+  - intent: gibberish
+  - action: utter_reject_gibberish
+  - intent: greet
+  - action: utter_greet
+
+# ===== ESCALATION STORIES - MULTIPLE VIOLATIONS =====
+- story: two offensive violations warning
+  steps:
+  - intent: offensive_language
+  - action: utter_reject_offensive
+  - action: action_log_violation
+  - action: action_handle_violation
+  - intent: offensive_language
+  - action: utter_reject_offensive
+  - action: action_log_violation
+  - action: action_handle_violation
+  - action: utter_final_warning
+
+- story: offensive then harassment warning
+  steps:
+  - intent: offensive_language
+  - action: utter_reject_offensive
+  - action: action_log_violation
+  - action: action_handle_violation
+  - intent: harassment
+  - action: utter_reject_harassment
+  - action: action_log_violation
+  - action: action_handle_violation
+  - action: utter_final_warning
+
+- story: three offensive violations terminate
+  steps:
+  - intent: offensive_language
+  - action: utter_reject_offensive
+  - action: action_log_violation
+  - action: action_handle_violation
+  - intent: offensive_language
+  - action: utter_reject_offensive
+  - action: action_log_violation
+  - action: action_handle_violation
+  - intent: offensive_language
+  - action: utter_reject_offensive
+  - action: action_log_violation
+  - action: action_handle_violation
+  - action: utter_session_terminated
+  - action: action_restart
+
+- story: mixed three violations terminate
+  steps:
+  - intent: offensive_language
+  - action: utter_reject_offensive
+  - action: action_log_violation
+  - action: action_handle_violation
+  - intent: sara_topic
+  - action: utter_reject_sara
+  - action: action_log_violation
+  - action: action_handle_violation
+  - intent: harassment
+  - action: utter_reject_harassment
+  - action: action_log_violation
+  - action: action_handle_violation
+  - action: utter_session_terminated
+  - action: action_restart
+
+# ===== RECOVERY STORIES =====
+- story: violation then complete recovery
+  steps:
+  - intent: offensive_language
+  - action: utter_reject_offensive
+  - action: action_log_violation
+  - action: action_handle_violation
+  - intent: greet
+  - action: utter_greet
+  - intent: ask_product_info
+  - action: utter_product_info
+  - intent: affirm
+  - action: utter_happy
+  - intent: goodbye
   - action: utter_goodbye
+
+- story: harassment recovery with reset
+  steps:
+  - intent: harassment
+  - action: utter_reject_harassment
+  - action: action_log_violation
+  - action: action_handle_violation
+  - intent: greet
+  - action: utter_greet
+  - intent: ask_product_info
+  - action: utter_product_info
+  - intent: goodbye
+  - action: utter_goodbye
+
+# ===== COMPLEX MIXED SCENARIOS =====
+- story: normal chat with one violation
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: chitchat_casual
+  - action: utter_chitchat
+  - intent: competitor_mention
+  - action: utter_reject_competitor
+  - action: action_log_violation
+  - intent: ask_product_info
+  - action: utter_product_info
+
+- story: product inquiry with competitor mention
+  steps:
+  - intent: ask_product_info
+  - action: utter_product_info
+  - intent: competitor_mention
+  - action: utter_reject_competitor
+  - action: action_log_violation
+  - intent: ask_product_info
+  - action: utter_product_info
+
+- story: multiple product inquiries
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: ask_product_info
+  - action: utter_product_info
+  - intent: ask_product_info
+  - action: utter_product_info
+  - intent: affirm
+  - action: utter_happy

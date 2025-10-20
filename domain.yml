@@ -1,33 +1,169 @@
 version: "3.1"
 
 intents:
+  # Safe intents
   - greet
-  - goodbye
+  - chitchat_casual
+  - ask_product_info
   - affirm
   - deny
-  - mood_great
-  - mood_unhappy
-  - bot_challenge
+  - goodbye
+  
+  # Guardrail intents
+  - offensive_language
+  - harassment
+  - competitor_mention
+  - request_sensitive_data
+  - share_sensitive_data
+  - political_topic
+  - sara_topic
+  - spam_pattern
+  - misleading_financial_claim
+  - prompt_injection
+  - out_of_scope_technical
+  - out_of_scope_general
+  - repetitive_message
+  - gibberish
+
+entities:
+  - nomor_rekening
+  - pin
+  - password
+  - nik
+  - ktp
+  - cvv
+
+slots:
+  user_name:
+    type: text
+    mappings:
+      - type: custom
+  
+  user_segment:
+    type: text
+    mappings:
+      - type: custom
+  
+  violation_count:
+    type: float
+    initial_value: 0
+    mappings:
+      - type: custom
+  
+  last_violation_type:
+    type: text
+    mappings:
+      - type: custom
 
 responses:
+  # Safe responses
   utter_greet:
-  - text: "Hey! How are you?"
-
-  utter_cheer_up:
-  - text: "Here is something to cheer you up:"
-    image: "https://i.imgur.com/nGF1K8f.jpg"
-
-  utter_did_that_help:
-  - text: "Did that help you?"
-
-  utter_happy:
-  - text: "Great, carry on!"
-
+    - text: "Halo! Selamat datang di BRI. Ada yang bisa saya bantu?"
+    - text: "Hai! Senang bisa membantu Anda hari ini. Ada yang ingin ditanyakan?"
+  
+  utter_chitchat:
+    - text: "Wah menarik sekali! Cerita lebih lanjut dong."
+    - text: "Senang mendengarnya! Ada hal lain yang ingin dibicarakan?"
+  
+  utter_product_info:
+    - text: "Baik, saya siap membantu menjelaskan produk BRI. Produk apa yang ingin Anda ketahui? Kami memiliki tabungan, deposito, kredit, dan berbagai layanan lainnya."
+    - text: "Tentu! BRI memiliki berbagai produk perbankan. Apakah Anda tertarik dengan tabungan, pinjaman, atau produk investasi?"
+  
   utter_goodbye:
-  - text: "Bye"
+    - text: "Terima kasih sudah menghubungi BRI! Sampai jumpa lagi."
+    - text: "Senang bisa membantu Anda. Jangan ragu untuk menghubungi kami kembali!"
+  
+  utter_happy:
+    - text: "Senang bisa membantu Anda! 😊"
+    - text: "Bagus! Saya senang bisa membantu."
+    - text: "Sempurna! Ada yang lain yang bisa saya bantu?"
+  
+  utter_cheer_up:
+    - text: "Mohon maaf jika belum bisa membantu. Ada hal lain yang bisa saya coba bantu?"
+    - text: "Baik, tidak masalah. Jika ada yang ingin ditanyakan lagi, saya siap membantu."
+  
+  utter_did_that_help:
+    - text: "Apakah informasi tersebut membantu?"
+    - text: "Apakah ada yang masih perlu dijelaskan?"
+  
+  # Guardrail responses - Offensive Language
+  utter_reject_offensive:
+    - text: "Maaf, mohon gunakan bahasa yang lebih sopan. Ada yang bisa saya bantu?"
+    - text: "Mohon untuk menggunakan bahasa yang sopan. Saya di sini untuk membantu Anda dengan baik."
+  
+  utter_reject_harassment:
+    - text: "Mohon berkomunikasi dengan sopan. Saya di sini untuk membantu Anda."
+    - text: "Saya memahami Anda mungkin frustrasi, tetapi mohon gunakan bahasa yang sopan agar saya bisa membantu dengan lebih baik."
+  
+  # Guardrail responses - Competitor
+  utter_reject_competitor:
+    - text: "Saya hanya dapat memberikan informasi tentang produk dan layanan BRI. Ada yang bisa saya bantu terkait BRI?"
+    - text: "Untuk informasi perbankan BRI, saya siap membantu. Apakah ada produk BRI yang ingin Anda ketahui?"
+  
+  # Guardrail responses - Sensitive Data
+  utter_reject_sensitive_request:
+    - text: "Untuk keamanan, saya tidak dapat memberikan informasi sensitif seperti PIN, password, atau nomor rekening. Silakan hubungi BRI Call Center 14017 atau kunjungi cabang terdekat."
+    - text: "Demi keamanan akun Anda, informasi pribadi seperti PIN dan password tidak dapat diberikan melalui chat. Mohon hubungi 14017 untuk bantuan lebih lanjut."
+  
+  utter_warn_sensitive_sharing:
+    - text: "⚠️ PENTING: Jangan pernah membagikan PIN, password, CVV, atau data pribadi Anda kepada siapa pun, termasuk ke chat ini. Untuk keamanan akun Anda, segera hubungi 14017 jika Anda mencurigai ada yang tidak beres."
+    - text: "⚠️ PERINGATAN KEAMANAN: Mohon jangan pernah membagikan informasi sensitif seperti PIN, password, atau CVV melalui chat. BRI tidak akan pernah meminta informasi tersebut. Jika ada yang mencurigakan, segera hubungi 14017."
+  
+  # Guardrail responses - Inappropriate Topics
+  utter_reject_political:
+    - text: "Maaf, saya tidak dapat berdiskusi tentang topik politik. Saya di sini untuk membantu kebutuhan perbankan Anda. Ada yang bisa saya bantu?"
+    - text: "Saya fokus membantu kebutuhan perbankan Anda. Apakah ada produk atau layanan BRI yang ingin ditanyakan?"
+  
+  utter_reject_sara:
+    - text: "Maaf, topik ini tidak sesuai dengan layanan kami. Ada yang bisa saya bantu terkait produk BRI?"
+    - text: "Mohon maaf, saya tidak dapat berdiskusi tentang topik tersebut. Mari kita fokus pada kebutuhan perbankan Anda."
+  
+  # Guardrail responses - Spam/Scam
+  utter_reject_spam:
+    - text: "Mohon maaf, pesan tersebut terdeteksi sebagai spam. Untuk informasi resmi BRI, silakan kunjungi website bri.co.id atau hubungi 14017."
+    - text: "Pesan tersebut tidak dapat diproses. Untuk informasi resmi BRI, gunakan saluran komunikasi resmi kami di bri.co.id atau hubungi 14017."
+  
+  # Guardrail responses - Financial Misinformation
+  utter_correct_financial_claim:
+    - text: "Perlu diketahui bahwa semua investasi memiliki risiko. BRI tidak menjanjikan keuntungan pasti atau bebas risiko. Untuk informasi akurat, silakan konsultasi dengan relationship manager kami."
+    - text: "Penting untuk dipahami bahwa tidak ada produk investasi yang 100% bebas risiko atau menjamin keuntungan pasti. Mari saya jelaskan secara realistis tentang produk kami."
+  
+  # Guardrail responses - Prompt Injection
+  utter_reject_injection:
+    - text: "Permintaan tidak dapat diproses. Ada yang bisa saya bantu terkait produk dan layanan BRI?"
+    - text: "Maaf, permintaan tersebut tidak sesuai. Bagaimana saya bisa membantu Anda dengan layanan BRI?"
+  
+  # Guardrail responses - Out of Scope
+  utter_reject_technical_threat:
+    - text: "Permintaan tersebut tidak dapat dilayani dan telah dicatat. Untuk bantuan perbankan, silakan hubungi layanan resmi BRI."
+    - text: "Aktivitas tersebut terdeteksi dan telah dicatat. Untuk layanan perbankan yang sah, silakan hubungi BRI Call Center 14017."
+  
+  utter_redirect_scope:
+    - text: "Maaf, saya hanya dapat membantu untuk pertanyaan seputar produk dan layanan BRI. Ada yang ingin ditanyakan tentang BRI?"
+    - text: "Saya khusus membantu untuk kebutuhan perbankan BRI. Apakah ada produk atau layanan BRI yang ingin Anda ketahui?"
+  
+  # Guardrail responses - Excessive/Gibberish
+  utter_reject_repetitive:
+    - text: "Saya melihat pesan berulang. Ada yang bisa saya bantu secara spesifik?"
+    - text: "Mohon sampaikan pertanyaan Anda dengan jelas. Ada yang bisa saya bantu?"
+  
+  utter_reject_gibberish:
+    - text: "Maaf, saya tidak dapat memahami pesan tersebut. Bisa disampaikan dengan lebih jelas?"
+    - text: "Mohon maaf, saya tidak mengerti maksud Anda. Bisa dijelaskan kembali dengan lebih detail?"
+  
+  # Warning escalation
+  utter_final_warning:
+    - text: "Ini adalah peringatan terakhir. Mohon gunakan layanan ini dengan sopan dan sesuai aturan. Pelanggaran lebih lanjut akan menyebabkan sesi dihentikan."
+  
+  utter_session_terminated:
+    - text: "Maaf, sesi chat dihentikan karena pelanggaran berulang. Untuk bantuan lebih lanjut, silakan hubungi BRI Call Center 14017."
 
-  utter_iamabot:
-  - text: "I am a bot, powered by Rasa."
+actions:
+  - action_check_guardrails
+  - action_handle_violation
+  - action_escalate_violation
+  - action_log_violation
+  - action_reset_violation_count
 
 session_config:
   session_expiration_time: 60

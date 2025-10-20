@@ -1,13 +1,29 @@
 version: "3.1"
 
 rules:
+# ===== ONLY SAFE INTENT RULES =====
+# Guardrail intents are handled ONLY in stories, not here
 
-- rule: Say goodbye anytime the user says goodbye
+- rule: Respond to greeting
+  steps:
+  - intent: greet
+  - action: utter_greet
+
+- rule: Respond to goodbye
   steps:
   - intent: goodbye
   - action: utter_goodbye
 
-- rule: Say 'I am a bot' anytime the user challenges
+- rule: Handle casual chitchat
   steps:
-  - intent: bot_challenge
-  - action: utter_iamabot
+  - intent: chitchat_casual
+  - action: utter_chitchat
+
+- rule: Handle product inquiry
+  steps:
+  - intent: ask_product_info
+  - action: utter_product_info
+
+# NOTE: affirm and deny are context-dependent, so they are handled in stories
+# NOTE: All guardrail intents (offensive_language, harassment, etc.) 
+# are handled in stories.yml to allow for violation tracking and escalation
