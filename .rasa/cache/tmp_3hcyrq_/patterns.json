@@ -1,0 +1,38 @@
+[
+  {
+    "name": "competitor_banks_pattern",
+    "pattern": "\\b(mandiri|bca|bni|cimb|permata|danamon|panin|mega|maybank|citibank|hsbc|ocbc)\\b"
+  },
+  {
+    "name": "hacking_pattern",
+    "pattern": "\\b(hack|hacking|meretas|bobol|exploit|phishing|malware|virus|ransomware)\\b"
+  },
+  {
+    "name": "offensive_words_pattern",
+    "pattern": "\\b(goblok|goblog|tolol|anjing|bangsat|bego|babi|idiot|bodoh|kampret|kontol|memek|ngentot|jancok|asu|bajingan|fuck|shit|damn)\\b"
+  },
+  {
+    "name": "prompt_injection_patterns",
+    "pattern": "\\b(admin mode|developer mode|root access|sudo|DAN mode|mode admin)\\b"
+  },
+  {
+    "name": "prompt_injection_patterns",
+    "pattern": "\\b(disable|remove|nonaktifkan|hapus)\\b.*(filter|constraint|safety|guardrail|batasan)"
+  },
+  {
+    "name": "prompt_injection_patterns",
+    "pattern": "\\b(ignore|forget|override|bypass|disregard|abaikan|lupakan)\\b.*(instruction|prompt|rule|command|perintah|instruksi|aturan)"
+  },
+  {
+    "name": "prompt_injection_patterns",
+    "pattern": "\\b(you are now|act as|pretend|kamu sekarang|bertingkah seperti)\\b"
+  },
+  {
+    "name": "sensitive_data_pattern",
+    "pattern": "\\b(pin|password|cvv|otp|rekening|kartu kredit)\\b.*\\d{3,}"
+  },
+  {
+    "name": "sensitive_data_pattern",
+    "pattern": "\\d{10,16}"
+  }
+]

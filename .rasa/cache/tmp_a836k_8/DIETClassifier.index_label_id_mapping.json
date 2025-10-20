@@ -1,0 +1,22 @@
+{
+  "0": "affirm",
+  "1": "ask_product_info",
+  "2": "chitchat_casual",
+  "3": "competitor_mention",
+  "4": "deny",
+  "5": "gibberish",
+  "6": "goodbye",
+  "7": "greet",
+  "8": "harassment",
+  "9": "misleading_financial_claim",
+  "10": "offensive_language",
+  "11": "out_of_scope_general",
+  "12": "out_of_scope_technical",
+  "13": "political_topic",
+  "14": "prompt_injection",
+  "15": "repetitive_message",
+  "16": "request_sensitive_data",
+  "17": "sara_topic",
+  "18": "share_sensitive_data",
+  "19": "spam_pattern"
+}
